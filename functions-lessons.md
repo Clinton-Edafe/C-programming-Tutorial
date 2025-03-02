@@ -1,10 +1,9 @@
 # Functions in C
 
-## Introduction
+In C programming, functions help in modularizing code, making it easier to debug, maintain, and reuse. Every C program must have at least one function, the `main` function, which serves as the entry point for execution.
 
-In C, functions are fundamental building blocks that allow modular programming, making code easier to debug, modify, and maintain. Every C program contains at least one function, which is the `main()` function. Functions help in reducing code redundancy and provide abstraction.
-
-## General Form of a Function Definition
+## Function Definition in C
+A C function is defined using the following general syntax:
 
 ```c
 return_data_type function_name (parameter list)
@@ -13,86 +12,63 @@ return_data_type function_name (parameter list)
 }
 ```
 
-### Example: Main Function with No Input Arguments
+### `main` Function Variants
+1. **Main function without arguments**:
+   ```c
+   int main(void)
+   {
+       // Code execution starts here
+   }
+   ```
 
-```c
-int main(void)
-{
-    /* Code execution starts here */
-    return 0;
-}
-```
+2. **Main function with command-line arguments**:
+   ```c
+   int main(int argc, char *argv[])
+   {
+       // Code execution with command-line arguments
+   }
+   ```
+   In embedded systems, programs typically run autonomously without user input from a command line. Therefore, passing arguments via argc and argv is not common. Instead, embedded systems rely on external inputs from sensors, hardware buttons, or communication interfaces.
+### Importance of `int main()`
+According to C89 and above standards, `main` should return an `int` value. Returning `void` may trigger warnings. 
 
-### Example: Main Function with Command-Line Arguments
+- `main()` takes zero or two arguments.
+- It returns the program’s execution status to the parent process:
+  - `0` → SUCCESS
+  - Non-zero → ERROR
 
-```c
-int main(int argc, char *argv[])
-{
-    /* argc - argument count, argv - argument vector (array of arguments) */
-    return 0;
-}
-```
-
-### Why Command-Line Arguments Are Rare in Embedded Systems
-
-In embedded systems, programs typically run autonomously without user input from a command line. Therefore, passing arguments via `argc` and `argv` is not common. Instead, embedded systems rely on external inputs from sensors, hardware buttons, or communication interfaces.
-
-## Importance of `int main()`
-
-As per the C standard (C89 and above), `main()` should return an integer value:
-
-```c
-int main()
-{
-    return 0; // 0 means SUCCESS, non-zero means ERROR
-}
-```
-
-Returning `void` in `main()` may trigger warnings because `main()` is expected to return an exit status to the parent process.
-
-## Function Calls and Parameters
-
-Functions can accept parameters, which are known as "formal parameters." These variables receive values when a function is called.
-
-### Example: Function to Add Numbers
+### Incorrect Function Example
+The following code defines and calls a function, but it lacks a function prototype before calling it:
 
 ```c
 #include <stdio.h>
 
-void function_add_numbers(int a, int b, int c)
-{
-    int sum = a + b + c;
-    printf("Sum = %d\n", sum);
-}
-
 int main()
 {
-    function_add_numbers(12, 13, 14);
+    function_add_numbers(12, 13, 14);  // Function is used before declaration
     function_add_numbers(-20, 20, 4);
     int valueA = 90, valueB = 70;
     function_add_numbers(valueA, valueB, 90);
-
     return 0;
 }
+
+// Function definition
+void function_add_numbers(int a, int b, int c)
+{
+    int sum;
+    sum = a + b + c;
+    printf("Sum = %d\n", sum);
+}
 ```
+**Error:** The function `function_add_numbers` is used before it is declared, which can cause implicit declaration issues.
 
-### Expected Output
-
-```
-Sum = 39
-Sum = 4
-Sum = 250
-```
-
-## Function Prototype
-
-A function prototype informs the compiler about the function's return type and the types of arguments it accepts.
-
-### Example with Function Prototype
+### Corrected Function with Prototype
+To fix this issue, we use a function prototype before calling the function:
 
 ```c
 #include <stdio.h>
 
+// Function prototype
 void function_add_numbers(int, int, int);
 
 int main()
@@ -101,50 +77,23 @@ int main()
     function_add_numbers(-20, 20, 14);
     int valueA = 90, valueB = 70;
     function_add_numbers(valueA, valueB, 90);
-
     return 0;
 }
 
 // Function definition
 void function_add_numbers(int a, int b, int c)
 {
-    int sum = a + b + c;
+    int sum;
+    sum = a + b + c;
     printf("Sum = %d\n", sum);
 }
 ```
 
 ### Expected Output
-
 ```
 Sum = 39
 Sum = 14
 Sum = 250
 ```
 
-## Common Mistake: Extra Semicolon in Function Definition
-
-Incorrect function definition:
-
-```c
-void function_add_numbers(int a, int b, int c);
-{
-    int sum = a + b + c;
-    printf("Sum = %d\n", sum);
-}
-```
-
-This code will cause a compilation error because of the extra semicolon after `function_add_numbers(int a, int b, int c);`. The correct way is:
-
-```c
-void function_add_numbers(int a, int b, int c)
-{
-    int sum = a + b + c;
-    printf("Sum = %d\n", sum);
-}
-```
-
-## Conclusion
-
-Functions in C provide modularity, reduce redundancy, and improve maintainability. The `main()` function serves as the program's entry point and should return an integer. Understanding function prototypes and proper function definitions is crucial to avoid errors. 
-
-
+By adding the function prototype, the compiler now knows the function’s return type and parameters before encountering the function call, preventing errors.
