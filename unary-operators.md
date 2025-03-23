@@ -128,3 +128,41 @@ y = 4, x = 4
 - **Pre-Decrement (`--x`)**: Decrements the value first, then assigns.
 - **Post-Decrement (`x--`)**: Assigns the value first, then decrements.
 
+# **Unary Operators with Pointers in C**  
+
+## **Introduction**  
+
+In C, **unary operators** like `++` (increment) and `--` (decrement) modify the value of a variable by **one unit**. When applied to **pointers**, these operators perform **pointer arithmetic**, moving the pointer to the next or previous memory location based on the **size of the data type**.  
+
+This document explores **unary operators with pointers**, explaining how and why pointer addresses change when incremented or decremented.  
+
+---
+
+## **1. Understanding Pointer Arithmetic with Unary Operators**  
+
+### **Example Code**  
+
+```c
+#include <stdio.h>
+#include <stdint.h>
+
+int main() {
+    uint32_t *pAddress = (uint32_t*) 0xFFFF0000;
+
+    printf("Initial address: %p\n", pAddress);
+    
+    // Arithmetic addition operation
+    pAddress = pAddress + 1;
+    printf("After pAddress = pAddress + 1: %p\n", pAddress);
+
+    // Unary increment operation
+    pAddress++;
+    printf("After pAddress++: %p\n", pAddress);
+
+    // Unary decrement operation
+    pAddress--;
+    printf("After pAddress--: %p\n", pAddress);
+
+    return 0;
+}
+
